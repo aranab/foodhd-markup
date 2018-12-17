@@ -1,0 +1,131 @@
+/* import font from goole fonts */
+@import url('https://fonts.googleapis.com/css?family=Open+Sans|Roboto:700');
+
+/* Color paletter */
+$white: rgba(255, 255, 255, 1);
+$black: rgba(0, 0, 0, 1);
+$lightGray: rgba(238, 238, 240, 1);
+$gray: rgba(101, 99, 100, 1);
+$red: rgba(202, 24, 38, 1);
+$maroon: rgba(107, 6, 14, 1);
+
+/* fonts */
+$openSanRegular: 'Open Sans', sans-serif;
+$robotBold: 'Roboto', sans-serif;
+
+/* apply fonts */
+$body-tag-font: $openSanRegular;
+$header-tag-font: $robotBold;
+$b-strong-tag-font: $robotBold;
+
+/* fonts color */
+$defualt-font-color: $gray;
+$link-font-color: $gray;
+$link-font-color-hover: $red;
+$icon-font-color: $black;
+$icon-font-hover-color: $red;
+
+/* fonts size */
+$default-font-size: 16px;
+
+/* radius */
+$default-border-radius: 8px;
+$button-border-radius: 0;
+
+/* shadow */
+$header-box-shadow: 0 2px 2px rgba($black, 0.2);
+$text-shadow: 0 2px 2px rgba($black, 0.2);
+
+/* background color */
+$body-background: $white;
+$footer-background: $lightGray;
+
+/* viewport */
+$smaller: (
+  'min-width': 320px,
+  'columns': susy-repeat(4),
+  'gutters': 1/6,
+);
+
+$small: (
+  'min-width': 340px,
+  'columns': susy-repeat(12),
+  'gutters': 1/6,
+);
+
+$medium: (
+  'min-width': 768px,
+  'columns': susy-repeat(12),
+  'gutters': 1.50,
+);
+
+$medium-large: (
+  'min-width': 960px,
+  'columns': susy-repeat(12),
+  'gutters': 1.50,
+);
+
+$large: (
+  'min-width': 1440px,
+  'columns': susy-repeat(12),
+  'gutters': 1.50,
+);
+
+$extra-large: (
+  'min-width': 2040px,
+  'columns': susy-repeat(12),
+  'gutters': 1.50,
+);
+
+/* Susy map setup */
+$susy: (
+    'columns': susy-repeat(12),
+    'gutters': 0.25,
+    'spread': 'narrow',
+    'container-spread': 'narrow',
+);
+
+/* Susy media query mixins */
+@mixin susy-at(
+  $config,
+  $maxWidth: false
+) {
+  //  parse and normalize any shorthand arguments
+  $config: susy-compile($config);
+
+  // build min-and-max queries
+  $min: map-get($config, 'min-width');
+  $min: if($min, '(min-width: #{$min})', null);  
+  $max: if($maxWidth, '(max-width: #{$maxWidth})', null);
+
+  // combine them if we need both
+  $and: if($min and $max, '#{$min} and #{$max}', null);
+  // or fall back to the value we need…
+  $query: $and or $min or $max;
+
+  // apply the results…
+  @media #{$query} {
+    @include susy-use($config) {
+      @content;
+    }
+  }
+}
+
+@mixin susy-use(
+  $config
+) {
+  //  parse and normalize any shorthand arguments
+  $config: susy-compile($config);
+
+  // record the global settings -
+  // and update the global variable with our new settings
+  $global: $susy;
+  $susy: map-merge($susy, $config) !global;
+
+  // any content inside this mixin
+  // will use the local settings
+  @content;
+
+  // return the global variable to its initial value
+  $susy: $global !global;
+}

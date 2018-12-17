@@ -50,7 +50,11 @@ module.exports = function (grunt) {
             dist: {
                 options: {
                     implementation: sass,
-                    sourceMap: false
+                    sourceMap: false,
+                    includePaths: [
+                        buildConfig.src.scss.cwd,
+                        buildConfig.nodeModules
+                    ]
                 },
                 src: buildConfig.src.scss.files,
                 dest: buildConfig.dist.scss
